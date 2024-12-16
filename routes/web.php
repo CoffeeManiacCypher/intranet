@@ -61,6 +61,7 @@ Route::prefix('pacientes')->name('pacientes.')->group(function () {
 });
 Route::get('/pacientes/{id}/resumen', [PacientesController::class, 'apiResumenPaciente'])->name('pacientes.resumen');
 
+Route::get('/pacientes', [PacientesController::class, 'index'])->name('pacientes.index');
 // --------------------------------------------------------------------------------------------------------------------
 
 // Servicios
