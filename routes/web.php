@@ -158,4 +158,8 @@ Auth::routes();
 
 Route::get('/prueba-componentes', function () {
     return view('prueba_componentes');
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> f54984645166dd5ed8a43c1a794037308fcf7b95
