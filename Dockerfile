@@ -28,9 +28,6 @@ COPY . /var/www/html
 RUN composer install --no-dev --no-scripts --optimize-autoloader
 RUN if [ -f "package.json" ]; then npm install && npm run build; fi
 
-# Generar APP_KEY para Laravel
-RUN php artisan key:generate
-
 # Configurar permisos para Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
