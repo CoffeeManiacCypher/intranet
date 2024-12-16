@@ -40,6 +40,7 @@ RUN a2enmod rewrite
 
 # Eliminar archivos innecesarios (mejora el tamaño final de la imagen)
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+CMD php artisan migrate --force && apache2-foreground
 
 # Exponer el puerto 80
 EXPOSE 80
