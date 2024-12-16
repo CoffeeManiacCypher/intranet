@@ -1,33 +1,41 @@
+# Usa una imagen de PHP y Node.js combinada
 FROM php:8.2-fpm
 
-# Instalar dependencias
+# Instala Node.js y npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get update && \
+    apt-get install -y nodejs
+
+# Instalar dependencias necesarias para Laravel
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
     zip \
     unzip \
+    git \
     curl \
-    git
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev
 
-# Instalar extensiones PHP
-RUN docker-php-ext-install pdo_mysql gd
-
-# Instalar Composer
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
-
-# Configurar directorio de Laravel
+# Configurar la carpeta de trabajo
 WORKDIR /var/www/html
-COPY . .
 
-# Permisos y caché de Laravel
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 storage bootstrap/cache
+# Copia los archivos del proyecto
+COPY . /var/www/html
 
-# Configurar Vite (para producción)
-RUN npm install && npm run build
+# Instalar dependencias de Composer
+RUN curl -sS https://getcomposer.org/installer | php && \
+    mv composer.phar /usr/local/bin/composer && \
+    composer install --no-dev --optimize-autoloader
 
-# Configurar la aplicación
-RUN composer install --no-dev --optimize-autoloader
+# Ejecutar build de npm (si existe package.json)
+RUN if [ -f "package.json" ]; then npm install && npm run build; fi
 
+# Configurar permisos para Laravel
+RUN chown -R www-data:www-data /var/www/html && \
+    chmod -R 775 storage bootstrap/cache
+
+# Exponer puerto 80
+EXPOSE 80
+
+# Comando por defecto para ejecutar PHP
 CMD ["php-fpm"]
