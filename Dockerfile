@@ -1,35 +1,33 @@
-# Usa una imagen base de PHP con Apache
-FROM php:8.2-apache
+FROM php:8.2-fpm
 
-# Instala extensiones de PHP necesarias
+# Instalar dependencias
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
-    libzip-dev \
+    zip \
     unzip \
-    && docker-php-ext-install zip pdo_mysql gd
+    curl \
+    git
 
-# Instala Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Instalar extensiones PHP
+RUN docker-php-ext-install pdo_mysql gd
 
-# Copia el proyecto Laravel al contenedor
-COPY . /var/www/html
+# Instalar Composer
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
-# Configura permisos
-RUN chown -R www-data:www-data /var/www/html
-RUN chmod -R 775 /var/www/html/storage
-
-# Instala las dependencias del proyecto
+# Configurar directorio de Laravel
 WORKDIR /var/www/html
-RUN composer install --no-dev --optimize-autoloader
+COPY . .
+
+# Permisos y caché de Laravel
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 storage bootstrap/cache
+
+# Configurar Vite (para producción)
 RUN npm install && npm run build
 
-# Configura Apache para usar Laravel como base
-RUN a2enmod rewrite
+# Configurar la aplicación
+RUN composer install --no-dev --optimize-autoloader
 
-# Expone el puerto 80
-EXPOSE 80
-
-# Comando por defecto para iniciar Apache
-CMD ["apache2-foreground"]
+CMD ["php-fpm"]
