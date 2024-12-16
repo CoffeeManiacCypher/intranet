@@ -40,7 +40,10 @@ RUN a2enmod rewrite
 
 # Eliminar archivos innecesarios (mejora el tamaño final de la imagen)
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-CMD php artisan migrate --force && apache2-foreground
+# Ejecutar migraciones y seeders en la base de datos
+RUN php artisan config:cache && php artisan route:cache && php artisan view:cache
+RUN php artisan migrate --force && php artisan db:seed --force || true
+
 
 # Exponer el puerto 80
 EXPOSE 80
