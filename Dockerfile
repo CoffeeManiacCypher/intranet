@@ -1,41 +1,30 @@
-# Usa una imagen de PHP y Node.js combinada
-FROM php:8.2-fpm
+# Imagen base de PHP con Apache
+FROM php:8.2-apache
 
-# Instala Node.js y npm
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get update && \
-    apt-get install -y nodejs
-
-# Instalar dependencias necesarias para Laravel
+# Instalar dependencias
 RUN apt-get update && apt-get install -y \
-    zip \
-    unzip \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev
+    git unzip libpng-dev libonig-dev libxml2-dev \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Configurar la carpeta de trabajo
-WORKDIR /var/www/html
-
-# Copia los archivos del proyecto
+# Copiar archivos del proyecto
 COPY . /var/www/html
 
-# Instalar dependencias de Composer
-RUN curl -sS https://getcomposer.org/installer | php && \
-    mv composer.phar /usr/local/bin/composer && \
-    composer install --no-dev --optimize-autoloader
+# Configuración de permisos
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Ejecutar build de npm (si existe package.json)
-RUN if [ -f "package.json" ]; then npm install && npm run build; fi
+# Instalar Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+WORKDIR /var/www/html
+RUN composer install --no-dev --optimize-autoloader
 
-# Configurar permisos para Laravel
-RUN chown -R www-data:www-data /var/www/html && \
-    chmod -R 775 storage bootstrap/cache
+# Configuración de entorno y optimización de Laravel
+COPY .env.example .env
+RUN php artisan config:cache
+RUN php artisan route:cache
+RUN php artisan view:cache
 
-# Exponer puerto 80
+# Exponer el puerto 80
 EXPOSE 80
 
-# Comando por defecto para ejecutar PHP
-CMD ["php-fpm"]
+# Iniciar Apache
+CMD ["apache2-foreground"]
