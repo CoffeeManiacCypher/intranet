@@ -14,7 +14,11 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    mariadb-client
+    mariadb-client \
+    libmariadb-dev
+
+# Instalar y habilitar pdo_mysql
+RUN docker-php-ext-install pdo pdo_mysql
 
 # Configurar la carpeta de trabajo
 WORKDIR /var/www/html
@@ -41,8 +45,8 @@ RUN a2enmod rewrite
 
 # Ejecutar migraciones y seeders automáticamente
 RUN php artisan config:cache
-RUN php artisan migrate --force
-RUN php artisan db:seed --force
+RUN php artisan migrate --force || true
+RUN php artisan db:seed --force || true
 
 # Exponer el puerto 80
 EXPOSE 80
