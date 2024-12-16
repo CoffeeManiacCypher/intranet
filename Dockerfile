@@ -1,52 +1,52 @@
-# Usar la imagen oficial de PHP con Apache
+# Usa la imagen base de PHP con Apache
 FROM php:8.2-apache
 
-# Instalar dependencias del sistema necesarias para Laravel y Node.js
+# Instala Node.js y npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get update && apt-get install -y nodejs
+
+# Instalar dependencias necesarias para Laravel
 RUN apt-get update && apt-get install -y \
-    curl \
     zip \
     unzip \
     git \
+    curl \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    libzip-dev \
-    libonig5 \
-    nodejs \
-    npm
+    mariadb-client
 
-# Instalar Composer
-RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
-
-# Configurar carpeta de trabajo
+# Configurar la carpeta de trabajo
 WORKDIR /var/www/html
 
 # Copiar archivos del proyecto
 COPY . /var/www/html
 
-# Instalar dependencias de Composer y npm
-RUN composer install --no-dev --no-scripts --optimize-autoloader
+# Instalar Composer y dependencias
+RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+RUN composer install --no-dev --optimize-autoloader
+
+# Ejecutar build de npm si existe package.json
 RUN if [ -f "package.json" ]; then npm install && npm run build; fi
 
-# Configurar permisos para Laravel
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Configurar permisos
+RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 775 storage bootstrap/cache
 
-# Configurar Apache DocumentRoot para apuntar a la carpeta 'public'
+# Configurar Apache DocumentRoot
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Habilitar mod_rewrite para las rutas amigables de Laravel
+# Habilitar mod_rewrite para Laravel
 RUN a2enmod rewrite
 
-# Eliminar archivos innecesarios (mejora el tamaño final de la imagen)
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-# Ejecutar migraciones y seeders en la base de datos
-RUN php artisan config:cache && php artisan route:cache && php artisan view:cache
-RUN php artisan migrate --force && php artisan db:seed --force || true
-
+# Ejecutar migraciones y seeders automáticamente
+RUN php artisan config:cache
+RUN php artisan migrate --force
+RUN php artisan db:seed --force
 
 # Exponer el puerto 80
 EXPOSE 80
 
 # Comando para iniciar Apache
 CMD ["apache2-foreground"]
+
