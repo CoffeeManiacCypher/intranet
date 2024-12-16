@@ -4,105 +4,58 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Paciente extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
+    // Definimos el nombre de la tabla
     protected $table = 'pacientes';
 
+    // Definimos los campos que pueden ser llenados
     protected $fillable = [
         'rut',
         'nombres',
         'apellidos',
-        'email',
         'telefono',
-        'telefono_secundario',
+        'comentario_adicional',
         'direccion',
-        'comuna_id',
         'ciudad_id',
-        'fecha_nacimiento',
-        'edad',
+        'email',
         'genero',
-        'verificado',
-        'fecha_creacion',
+        'estado_info',
+        'fecha_nacimiento',
+        'created_at',
+        'updated_at',
     ];
 
     // Relaciones
-    public function comuna()
-    {
-        return $this->belongsTo(Comuna::class, 'comuna_id');
-    }
-
     public function ciudad()
     {
-        return $this->belongsTo(Ciudad::class, 'ciudad_id', 'ciudad_id');
+        return $this->belongsTo(Ciudad::class, 'ciudad_id');
     }
 
-    // Métodos adicionales
-
-    /**
-     * Verifica el estado del paciente basado en la completitud de sus datos.
-     */
-    public function verificarEstado()
+    // Mutators (Opcional) - Obtener el nombre completo del paciente
+    public function getNombreCompletoAttribute()
     {
-        if (!empty($this->rut) && !empty($this->nombres) && !empty($this->apellidos)) {
-            $this->verificado = 'verificado';
-        } else {
-            $this->verificado = 'pendiente';
-        }
-    }
-
-    /**
-     * Calcula la edad y la guarda en la columna correspondiente si la fecha de nacimiento es válida.
-     */
-    public function calcularEdad()
-    {
-        if ($this->fecha_nacimiento) {
-            try {
-                // Convertir fecha de nacimiento al formato correcto
-                $fechaNacimiento = Carbon::parse($this->fecha_nacimiento);
-                
-                // Validar si la fecha es válida y en el pasado
-                if ($fechaNacimiento->isPast()) {
-                    // Calcular la edad correctamente
-                    $this->edad = $fechaNacimiento->diffInYears(Carbon::now());
-                } else {
-                    $this->edad = null; // Asignar null si la fecha es inválida o futura
-                }
-            } catch (\Exception $e) {
-                $this->edad = null; // Manejar errores asignando null
-            }
-        } else {
-            $this->edad = null; // Asignar null si no hay fecha de nacimiento
-        }
+        return trim(($this->nombres ?? '') . ' ' . ($this->apellidos ?? ''));
     }
     
-
-    /**
-     * Mutator para asegurarse de que fecha_nacimiento se almacene como una instancia de Carbon.
-     */
-    public function setFechaNacimientoAttribute($value)
+    public function reservas()
     {
-        try {
-            $this->attributes['fecha_nacimiento'] = Carbon::parse($value)->format('Y-m-d');
-        } catch (\Exception $e) {
-            $this->attributes['fecha_nacimiento'] = null; // Si ocurre un error, manejarlo asignando null
-        }
+        return $this->hasMany(Reserva::class, 'paciente_id');
     }
-
-    /**
-     * Boot para calcular edad automáticamente al guardar o actualizar un paciente.
-     */
-    protected static function boot()
+    
+    public function giftcards()
     {
-        parent::boot();
-
-        static::saving(function ($paciente) {
-            // Calcular edad y verificar estado antes de guardar el paciente
-            $paciente->calcularEdad();
-            $paciente->verificarEstado();
-        });
+        return $this->hasMany(Giftcard::class, 'paciente_id');
     }
+    
+    
+
+    // Soft delete
+    protected $dates = ['deleted_at'];
+
+
 }

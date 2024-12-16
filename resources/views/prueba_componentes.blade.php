@@ -6,24 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prueba de Componentes</title>
 
-    <!-- Para que cargue todos los componentes de css -->
-    @php
-        $cssFiles = glob(public_path('css/*.css')); 
-    @endphp
-
-    @foreach ($cssFiles as $cssFile)
-        <link rel="stylesheet" href="{{ asset('css/' . basename($cssFile)) }}">
-    @endforeach
-
-     <!-- Para que cargue todos los componentes de js -->
-
-    @php
-        $jsFiles = glob(public_path('js/*.js')); 
-    @endphp
-
-    @foreach ($jsFiles as $jsFile)
-        <script src="{{ asset('js/' . basename($jsFile)) }}"></script>
-    @endforeach
+    @vite(['resources/css/global/app.css', 'resources/js/global/app.js'])
      
     <!-- css adicionales -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -39,11 +22,54 @@
 
     <section>
         <h2>Botones</h2>
-        <button class="btn">Botón General</button>
-        <button class="btn btn-primary">Botón Primario</button>
-        <button class="btn btn-secondary">Botón Secundario</button>
-        <button class="btn btn-success">Botón Success</button>
-        <button class="btn btn-danger">Botón Peligro</button>
+
+        <button >
+            <span>Boton base</span>
+        </button>
+
+        <button class="primario">
+            <span>Boton primario</span>
+        </button>
+
+        <button class="primario">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Botón Primario</span>
+        </button>
+
+        <button class="secundario">
+            <span>Botón Secundario</span>
+        </button>
+        
+        <button disabled >
+            <span>Botón Deshabilitado</span>
+        </button>
+
+        <button class="editar">
+            <i class="fa-solid fa-pen"></i>
+            <span>Editar</span>
+        </button>
+
+        <button class="eliminar">
+            <i class="fa-solid fa-trash"></i>
+            <span>Eliminar</span>
+        </button>
+
+        <button class="submit">
+            Botón envio
+        </button>
+
+        <button class="reset">
+            Botón reset
+        </button>
+
+        <button class="sidebar-content">
+            <i class="fa-solid fa-trash"></i>
+            <span>Añadir Servicio</span>
+        </button>
+
+        
+
+
     </section>
 
     </br>
@@ -96,7 +122,7 @@
         </div>
 
 
-        <button type="submit" class="btn btn-secondary">Botón Secundario</button>
+        <button type="submit">Enviar</button>
 
     </form>
 

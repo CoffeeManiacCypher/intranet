@@ -1,0 +1,10 @@
+import './bootstrap';
+import './alert';
+import './botones';
+import './checkbox';
+import './email';
+import './input';
+import './modal';
+import './radios';
+import './sidebar';
+import './tabla';

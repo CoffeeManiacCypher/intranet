@@ -2,6 +2,10 @@
 
 @section('title', 'Inicio')
 
+@vite(['resources/css/home/animated-background.css', 'resources/js/home/animated-background.js'])
+@vite(['resources/css/home/home.css','resources/js/home/home.js'])
+@vite(['resources/css/global/sidebar.css', 'resources/js/global/sidebar.js'])
+
 @section('content')
 <div class="home-container">
     <!-- Título principal -->
@@ -26,22 +30,22 @@
                 </div>
                 <!-- Módulo Pacientes -->
 
-                <!-- Módulo Giftcards -->
+                <!-- Módulo Reservas -->
                 <div class="swiper-slide">
-                    <div class="icon-bubble" data-description="Editor de Giftcard: Gestiona giftcards y sus configuraciones."
-                        data-icon="bi bi-card-text" data-bg-color="#f9f5ed">
-                        <a href="{{ route('giftcards.index') }}">
-                            <img src="{{ asset('img/icons/giftcard.jpg') }}" alt="Giftcards">
+                    <div class="icon-bubble" data-description="Gestor de Reservas: Procesa pagos rápidos mediante códigos QR."
+                        data-icon="bi bi-qr-code" data-bg-color="#e0e1f7">
+                        <a href="{{ route('reservas.index') }}">
+                            <img src="{{ asset('img/icons/pagoqr.jpg') }}" alt="Pago QR">
                         </a>
                     </div>
                 </div>
 
-                <!-- Módulo Pago QR -->
+                <!-- Módulo Servicios -->
                 <div class="swiper-slide">
-                    <div class="icon-bubble" data-description="Gestor de finanzas: Procesa pagos rápidos mediante códigos QR."
-                        data-icon="bi bi-qr-code" data-bg-color="#e0e1f7">
-                        <a href="{{ route('pagoqr.index') }}">
-                            <img src="{{ asset('img/icons/pagoqr.jpg') }}" alt="Pago QR">
+                    <div class="icon-bubble" data-description="Servicios: Gestiona tus servicios y promociones actuales."
+                        data-icon="bi bi-briefcase" data-bg-color="#ded0e6">
+                        <a href="{{ route('servicios.index') }}">
+                            <img src="{{ asset('img/icons/servicios.jpg') }}" alt="Servicios">
                         </a>
                     </div>
                 </div>
@@ -56,27 +60,17 @@
                     </div>
                 </div>
 
-                <!-- Módulo Servicios -->
+                <!-- Módulo Giftcards -->
                 <div class="swiper-slide">
-                    <div class="icon-bubble" data-description="Servicios: Accede a la gestión de tus servicios."
-                        data-icon="bi bi-briefcase" data-bg-color="#ded0e6">
-                        <a href="{{ route('servicios.index') }}">
-                            <img src="{{ asset('img/icons/servicios.jpg') }}" alt="Servicios">
+                    <div class="icon-bubble" data-description="Editor de Giftcard: Gestiona giftcards y sus configuraciones."
+                        data-icon="bi bi-card-text" data-bg-color="#f9f5ed">
+                        <a href="{{ route('giftcard.index') }}">
+                            <img src="{{ asset('img/icons/giftcard.jpg') }}" alt="Giftcards">
                         </a>
                     </div>
                 </div>
 
-                <!-- Módulo Servicios -->
-                <div class="swiper-slide">
-                    <div class="icon-bubble" data-description="Proximamente: "
-                        data-icon="" data-bg-color="#e3e3e3">
-                        <a href="#">
-                            <img src="{{ asset('img/icons/default.jpg') }}" alt="proximamente">
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Módulo Servicios -->
+                <!-- Módulo adicional placeholder para equipo VAM -->
                 <div class="swiper-slide">
                     <div class="icon-bubble" data-description="Proximamente: "
                         data-icon="" data-bg-color="#e3e3e3">
@@ -86,7 +80,7 @@
                     </div>
                 </div>
 
-                <!-- Módulo Servicios -->
+                <!-- Módulo adicional placeholder para equipo VAM -->
                 <div class="swiper-slide">
                     <div class="icon-bubble" data-description="Proximamente: "
                         data-icon="" data-bg-color="#e3e3e3">
@@ -96,7 +90,25 @@
                     </div>
                 </div>
 
-              
+                <!-- Módulo adicional placeholder para equipo VAM -->
+                <div class="swiper-slide">
+                    <div class="icon-bubble" data-description="Proximamente: "
+                        data-icon="" data-bg-color="#e3e3e3">
+                        <a href="#">
+                            <img src="{{ asset('img/icons/default.jpg') }}" alt="proximamente">
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Módulo adicional placeholder para equipo VAM -->
+                <div class="swiper-slide">
+                    <div class="icon-bubble" data-description="Proximamente: "
+                        data-icon="" data-bg-color="#e3e3e3">
+                        <a href="#">
+                            <img src="{{ asset('img/icons/default.jpg') }}" alt="proximamente">
+                        </a>
+                    </div>
+                </div>
 
             </div>
 
@@ -117,7 +129,7 @@
             </div>
             <div class="description-content"></div>
         </div>
-
     </div>
+
 </div>
 @endsection

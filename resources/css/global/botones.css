@@ -1,0 +1,120 @@
+button{
+    align-items: center;
+    justify-content: space-between;
+    display: inline-flex; 
+
+    padding: 1rem 3rem;
+    font-size: 1rem;
+    border: none; 
+    border-radius: 3rem;
+
+    font-family: 'Poppins', sans-serif; 
+
+    font-weight: 520;
+    color: #333; 
+    background-color: #f9faff; 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+    transition: all 0.3s ease; 
+    cursor: pointer; 
+    margin-inline: 1rem;
+    margin: 1rem;
+    overflow: hidden;
+    transition: all 300ms ease;
+}
+
+/* Efecto hover */
+button:hover {
+    background-color: #e3efff; 
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); 
+    transform: translateY(-2px); 
+}
+
+/* Efecto focus */
+button:focus {
+    outline: 0.3rem solid var(--color-secundario); /* Borde de enfoque */
+    outline-offset: 3px;
+}
+
+button:disabled {
+    background-color: #d6d6d6; 
+    box-shadow:none; 
+    transform: translateY(0px); 
+    color: #8b8b8b;
+}
+
+button:disabled:hover {
+    background-color: #d6d6d6; 
+    box-shadow:none; 
+    transform: translateY(0px);
+    cursor: not-allowed;
+}
+
+button i{
+    font-size: 1.5rem;
+    margin-right: 0.8rem;
+    color: inherit; 
+    transition: transform 0.3s ease;
+}
+
+button span {
+    flex: 1; /* Permite al texto ocupar el espacio disponible */
+    text-align: left; /* Alineación del texto */
+}
+
+.primario{
+    border: 0.2rem solid #f9faff; 
+    background-color: var(--color-primario);
+    outline: 0.2rem solid var(--color-primario);
+    color: #f9faff; 
+}
+
+.primario:hover{
+    border: 0.2rem solid #f9faff; 
+    background-color: var(--color-secundario);
+    outline: 0.2rem solid var(--color-secundario);
+    color: var(--color-secundario-hover);
+}
+
+
+.secundario{
+    border: 0.2rem solid var(--color-primario);
+    background-color: #f9faff; 
+    outline: 0.2rem solid #f9faff; 
+    color: var(--color-primario-hover);
+}
+
+.secundario:hover{
+    border: 0.2rem solid #f9faff; 
+    background-color: var(--color-primario);
+    outline: 0.2rem solid var(--color-primario);
+    color: #f9faff; 
+}
+
+.editar{
+    border: 0.2rem solid #FFD09B;
+    background-color: #f9faff; 
+    outline: 0.2rem solid #f9faff; 
+    color:  #FFC178;
+}
+
+.editar:hover{
+    border: 0.2rem solid #f9faff; 
+    background-color:  #FFC178;
+    outline: 0.2rem solid  #FFC178;
+    color: #f9faff; 
+}
+
+.eliminar{
+    border: 0.2rem solid #FF8A8A;
+    background-color: #f9faff; 
+    outline: 0.2rem solid #f9faff; 
+    color:  #FF6E6E;
+}
+
+.eliminar:hover{
+    border: 0.2rem solid #f9faff; 
+    background-color:  #FF6E6E;
+    outline: 0.2rem solid  #FF6E6E;
+    color: #f9faff; 
+}
+
